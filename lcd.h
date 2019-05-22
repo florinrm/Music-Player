@@ -110,4 +110,3 @@ void LCD_print(const char* msg);                    // Afiseaza string-ul pe LCD
 void LCD_printAt(uint8_t addr, const char* msg);    // Afiseaza string-ul pe LCD incepand de la adresa primita.
 
 #endif // LCD_H_
-

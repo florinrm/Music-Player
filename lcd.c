@@ -233,4 +233,3 @@ void LCD_printAt(uint8_t addr, const char* msg)
     LCD_writeInstr(LCD_INSTR_DDRAM | addr);
     LCD_print(msg);
 }
-

@@ -1,4 +1,4 @@
-PORT ?= /dev/tty3
+PORT ?= tty0
 
 all: test.hex
 

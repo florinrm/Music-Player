@@ -9,14 +9,16 @@ void LCD_init(void)
     // setam pinii de comenzi ca pini de iesire
     LcdCTRL_DDR |= LCD_CTRL_MASK;
 
+    // activam backlight
+    DDRC |= (1 << PC7);
+    PORTC |= (1 << PC7);
+
     // intram in modul comenzi: RS - low, RW - low
     LCD_RS_LOW();
     LCD_RW_LOW();
 
     // asteptam timpul de set-up pentru RS si RW
     LCD_DELAY();
-
-    // initializarea pentru 4 fire de date necesita transferarea lui 0100 -> D4-D7
 
     // E pe high incepe transferul
     LCD_ENABLE();
@@ -37,6 +39,7 @@ void LCD_init(void)
 
     // transmitem configuratia initiala
     // 4 biti de date, 2 linii, font 8x5
+    LCD_writeInstr(LCD_INSTR_4wire);
     LCD_writeInstr(LCD_INSTR_4wire);
     // display pornit, cursor afisat, blink activat
     LCD_writeInstr(LCD_INSTR_displayConfig);
@@ -131,7 +134,7 @@ uint8_t LCD_isBusy(void)
 // Asteapta pana cand LCD-ul devine disponibil pentru o noua comanda.
 void LCD_waitNotBusy(void)
 {
-    while(LCD_isBusy());
+    while(LCD_isBusy()) ;
 }
 
 // Executa secventa de trimitere a unui octet de date catre LCD.
@@ -212,8 +215,6 @@ void LCD_putChar(char c)
 // Afiseaza caracterul pe LCD la adresa primita.
 void LCD_putCharAt(uint8_t addr, char c)
 {
-    /* TODO task 1 LCD */
-
     LCD_writeInstr(LCD_INSTR_DDRAM + addr);
     LCD_putChar(c);
 }
@@ -223,13 +224,25 @@ void LCD_print(const char* msg)
 {
     while(*msg)
         LCD_putChar(*msg++);
+	LCD_DELAY();
 }
 
 // Afiseaza string-ul pe LCD incepand de la adresa primita.
 void LCD_printAt(uint8_t addr, const char* msg)
 {
-    /* TODO task 1 LCD */
-
     LCD_writeInstr(LCD_INSTR_DDRAM | addr);
     LCD_print(msg);
+    LCD_DELAY();
+}
+
+// Sterge linia de sus a LCD-ului
+void LCD_clear_top_line()
+{
+	LCD_printAt(0x00, "                ");
+}
+
+// Sterge linia de jos a LCD-ului
+void LCD_clear_bottom_line()
+{
+	LCD_printAt(0x40, "                ");
 }

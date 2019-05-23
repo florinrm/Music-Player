@@ -4,7 +4,7 @@ all: test.hex
 
 program: upload
 
-test.elf: test.c lcd.c util.c
+test.elf: test.c lcd.c util.c pff.c sd.c spi.c
 	avr-g++ -mmcu=atmega324p -DF_CPU=16000000 -Wall -Os -o $@ $^
 
 test.hex: test.elf

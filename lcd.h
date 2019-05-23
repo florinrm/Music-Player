@@ -30,7 +30,7 @@
 #define LcdE                    PC2
 
 /*****************************************************************************\
- * Comnezi utile                                                             *
+ * Comenzi utile                                                             *
 \*****************************************************************************/
 
 #define LCD_INSTR_4wire         0x28    // 4 biti de date, 2 linii, font 8x5
@@ -102,11 +102,13 @@ void LCD_writeInstr(uint8_t instr);
 // Trimite o instructiune de scriere date catre LCD.
 void LCD_writeData(uint8_t data);
 
-
 void LCD_putChar(char c);                           // Afiseaza caracterul pe LCD la adresa curenta.
 void LCD_putCharAt(uint8_t addr, char c);           // Afiseaza caracterul pe LCD la adresa primita.
 
 void LCD_print(const char* msg);                    // Afiseaza string-ul pe LCD incepand de la adresa curenta.
 void LCD_printAt(uint8_t addr, const char* msg);    // Afiseaza string-ul pe LCD incepand de la adresa primita.
+
+void LCD_clear_top_line();                          // Sterge linia de sus a LCD-ului
+void LCD_clear_bottom_line();                       // Sterge linia de jos a LCD-ului
 
 #endif // LCD_H_

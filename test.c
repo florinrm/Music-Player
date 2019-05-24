@@ -60,6 +60,7 @@
 #define LED_GREEN_A PA1
 
 #define NOTES 40
+#define CHANGE_NOTE 400
 
 #define c    261
 #define d    294
@@ -82,15 +83,13 @@
 #define aH   880
 
 
-const char* messages[4] = {
-	"Imperial March",
-	"Papuci Gucci",
-	"A Place With No Name",
-	"Lucid Dreams"
+const char* messages[4][2] = {
+	{"Imperial March", "Star Wars"},
+	{"Papuci Gucci", "abi"},
+	{"A Place With No Name", "Michael Jackson"},
+	{"Lucid Dreams", "Juice WRLD"}
 };
 
-const char* message1 = "Imperial March";
-const char* meessage2 = "Papuci Gucci";
 int nr_nota;
 int durata;
 
@@ -314,16 +313,31 @@ int main() {
 	long switchColorB = 0, switchColorD = 0, switchColorA = 0;
 	int isColorSwitchedB = 0, isColorSwitchedD = 0, isColorSwitchedA = 0;
 
-	int i = 0, j = 0;
+	int i = 0, j = 0, increment_note = 0;
+	int if_changed_j = 0, if_changed_i = 0;
 	initLeds();
     for (;;) {
-        LCD_printAt(0x00, messages[i]);
+		if (if_changed_i) {
+			if_changed_i = 0;
+			LCD_clear_top_line();
+			LCD_clear_bottom_line();
+		}
+        LCD_printAt(0x00, messages[i][0]);
+		LCD_printAt(0x40, messages[i][1]);
 		
-		speaker_reda(notes[i++][j++]);
-		if (j == NOTES)
-			j = 0;
-		if (i == 4)
-			i = 0;
+		speaker_reda(notes[i][j]);
+		++increment_note;
+		if (increment_note == CHANGE_NOTE) {
+			++j;
+			if (j == NOTES) {
+				j = 0;
+				if_changed_i = 1;
+				++i;
+			}
+			if (i == 4)
+				i = 0;
+			increment_note = 0;
+		}
 		// port B
 		
 		++switchColorB;
